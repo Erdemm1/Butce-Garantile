@@ -1,0 +1,30 @@
+﻿@model Butce_Garantile.Models.Gider
+
+@{
+    Layout = "_Layout"; // Bu, Views/Shared/_Layout.cshtml dosyasını bulur.
+}
+<div class="row">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="page-header">
+            <div class="page-breadcrumb">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<h1>Gider Sil</h1>
+
+<h3>@Model.Aciklama</h3>
+<p>Tutar: @Model.Tutar</p>
+<p>Tarih: @Model.Tarih.ToShortDateString()</p>
+<p>Gider Türü: @Model.GiderTuru</p>
+<p>Düzenli Gider Mi?: @(Model.IsDüzenli ? "Evet" : "Hayır")</p>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Sil</button>
+    <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+</form>

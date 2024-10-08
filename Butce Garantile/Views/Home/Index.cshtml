@@ -1,0 +1,215 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Include Bootstrap CSS if it's not already included in _Layout -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-ecommerce">
+        <div class="container-fluid dashboard-content ">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Button to toggle the target form -->
+            <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#targetForm" aria-expanded="false" aria-controls="targetForm">
+                Hedefinizi Belirleyin
+            </button>
+            
+            <!-- Collapsible target form -->
+            <div class="collapse" id="targetForm">
+                <div class="card mt-2">
+                    <div class="card-body">
+                        <form asp-action="SetTarget" method="post" id="targetFormElement">
+                            <div class="form-group">
+                                <label for="target">Hedefinizi Belirleyin:</label>
+                                <input type="number" id="target" name="target" class="form-control" required />
+                            </div>
+                            <button type="submit" class="btn btn-primary">Hedefi Kaydet</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="congratsMessage" class="alert alert-success" style="display:none; margin-top: 20px;">
+                Tebrikler hedefinize ulaştınız!
+            </div>
+
+            <div class="ecommerce-widget">
+                <div class="row">
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="text-muted">Toplam Gelir</h5>
+                                <div class="metric-value d-inline-block">
+                                    <h1 class="mb-1">
+                                        <span id="toplamGelir" style="color:green;">₺@ViewBag.ToplamGelir</span>
+                                    </h1>
+                                </div>
+                            </div>
+                            <div id="sparkline-revenue"></div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="text-muted">Toplam Gider</h5>
+                                <div class="metric-value d-inline-block">
+                                    <h1 class="mb-1">
+                                        <span id="toplamGider" style="color:red;">₺@ViewBag.ToplamGider</span>
+                                    </h1>
+                                </div>
+                            </div>
+                            <div id="sparkline-revenue2"></div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="text-muted">Değişim</h5>
+                                <div class="metric-value d-inline-block">
+                                    <h1 class="mb-1">
+                                        <span id="degisim" class="degisim-rengi">₺@ViewBag.Degisim</span>
+                                    </h1>
+                                </div>
+                            </div>
+                            <div id="sparkline-revenue3"></div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="text-muted">Hedefe Kalan</h6>
+                                <div class="metric-value d-inline-block">
+                                    <h1 class="mb-1">
+                                        <span id="kalan" class="degisim-rengi">₺@ViewBag.Kalan</span>
+                                    </h1>
+                                </div>
+                            </div>
+                            <div id="sparkline-revenue4"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 col-12">
+                        <div class="card">
+                            <h5 class="card-header">Gelirler</h5>
+                            <div class="card-body">
+                                <div id="gelir_chart" style="height: 420px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 col-12">
+                        <div class="card">
+                            <h5 class="card-header">Giderler</h5>
+                            <div class="card-body">
+                                <div id="gider_chart" style="height: 420px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="~/concept-master/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="~/concept-master/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <script src="~/concept-master/assets/libs/js/main-js.js"></script>
+    <script src="~/concept-master/assets/vendor/charts/chartist-bundle/chartist.min.js"></script>
+    <script src="~/concept-master/assets/vendor/charts/sparkline/jquery.sparkline.js"></script>
+    <script src="~/concept-master/assets/vendor/charts/morris-bundle/raphael.min.js"></script>
+    <script src="~/concept-master/assets/vendor/charts/morris-bundle/morris.js"></script>
+    <script src="~/concept-master/assets/vendor/charts/c3charts/c3.min.js"></script>
+    <script src="~/concept-master/assets/vendor/charts/c3charts/d3-5.4.0.min.js"></script>
+    <script src="~/concept-master/assets/vendor/charts/c3charts/C3chartjs.js"></script>
+    <script src="~/concept-master/assets/libs/js/dashboard-ecommerce.js"></script>
+
+    <script>
+    $(function () {
+        // Gelir ve gider verileri backend'den ViewBag kullanarak geliyor
+        var gelirData = [
+            @foreach (var item in ViewBag.GelirKategorileri)
+            {
+                @:["@item.Kategori", @item.Tutar],
+            }
+        ];
+
+        var giderData = [
+            @foreach (var item in ViewBag.GiderKategorileri)
+            {
+                @:["@item.Kategori", @item.Tutar],
+            }
+        ];
+
+        $(function () {
+            // Hedefe kalan kısmını kontrol et
+            var kalanValue = parseFloat("@ViewBag.Kalan");
+            
+            // Hedef formunun görünürlüğünü kontrol et
+            if (kalanValue < 0 || kalanValue === 0) {
+                $('#kalan').text('Tebrikler!'); // Hedef tamamlama
+                $('#congratsMessage').show(); // Ayrıca tebrik mesajını göster
+                $('#targetForm').collapse('show'); // Yeni hedef girmeye aç
+            } else {
+                $('#kalan').text('₺' + kalanValue.toFixed(2)); // Kalan miktar
+                $('#targetForm').collapse('hide'); // Hedef girişi kapalı
+            }
+        });
+
+        // Gelirler grafiği
+        var gelirChart = c3.generate({
+            bindto: "#gelir_chart",
+            data: {
+                columns: gelirData,
+                type: 'donut'
+            },
+            donut: {
+                title: "Gelir Dağılımı"
+            },
+            color: {
+                pattern: ['#5969ff', '#ff407b', '#25d5f2', '#ffc750', '#2ec551', '#42f5d7']
+            }
+        });
+
+        // Giderler grafiği
+        var giderChart = c3.generate({
+            bindto: "#gider_chart",
+            data: {
+                columns: giderData,
+                type: 'donut'
+            },
+            donut: {
+                title: "Gider Dağılımı"
+            },
+            color: {
+                pattern: ['#ff5969', '#407bff', '#d525f2', '#750ffc', '#551ec2', '#f542d7']
+            }
+        });
+
+        // Değişim rengini ayarlama
+        var degisimValue = parseFloat("@ViewBag.Degisim");
+        if (degisimValue < 0) {
+            $('#degisim').css('color', 'red');
+        } else {
+            $('#degisim').css('color', '#32CD32'); // LimeGreen
+        }
+    });
+    </script>
+</body>
+</html>

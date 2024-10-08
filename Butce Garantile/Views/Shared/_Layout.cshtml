@@ -1,0 +1,187 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewData["Title"] - Bütçe Takip Uygulaması</title>
+
+    <!-- Stil dosyaları -->
+    <link rel="stylesheet" href="~/concept-master/assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link href="~/concept-master/assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/concept-master/assets/libs/css/style.css">
+    <link rel="stylesheet" href="~/concept-master/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css">
+
+    <style>
+        .navbar-brand {
+            background-color: transparent;
+            opacity: 1;
+            z-index: 1;
+        }
+
+        .dashboard-wrapper {
+            margin-left: 0;
+            transition: all 0.3s;
+        }
+
+        .nav-left-sidebar {
+            position: fixed;
+            top: 60px;
+            left: -264px;
+            width: 264px;
+            height: calc(100% - 60px);
+            background-color: #343a40;
+            transition: all 0.3s;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .nav-left-sidebar.active {
+            left: 0;
+        }
+
+        .dashboard-wrapper.sidebar-open {
+            margin-left: 264px;
+        }
+
+        .menu-list {
+            padding: 15px 10px;
+        }
+
+        #sidebarToggle {
+            display: block;
+        }
+
+        @@media (min-width: 992px) {
+            .nav-left-sidebar {
+                left: 0;
+            }
+
+            .dashboard-wrapper {
+                margin-left: 264px;
+            }
+
+            #sidebarToggle {
+                display: none;
+            }
+        }
+
+        @@media (max-width: 991px) {
+            .dashboard-wrapper.sidebar-open {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-header">
+        <nav class="navbar navbar-expand-lg bg-white fixed-top">
+            <button id="sidebarToggle" class="btn btn-link d-md-none rounded-circle mr-3">
+                <i class="fa fa-bars"></i>
+            </button>
+            <a class="navbar-brand" href="/Home/Index">Bütçe Takip</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto navbar-right-top">
+                    <li class="nav-item dropdown nav-user">
+                        <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="~/concept-master/3135715.png" alt="" class="user-avatar-md rounded-circle">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
+                            <div class="nav-user-info">
+                                <h5 class="mb-0 text-white nav-user-name">Kullanıcı Adı</h5>
+                            </div>
+                            <a class="dropdown-item" href="~/Account/Login"><i class="fas fa-sign-in-alt mr-2"></i>Giriş Yap</a>
+                            <a class="dropdown-item" href="~/Account/Register"><i class="fas fa-user-plus mr-2"></i>Kayıt Ol</a>
+                            <a class="dropdown-item" href="~/Account/Logout"><i class="fas fa-power-off mr-2"></i>Çıkış</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <div class="nav-left-sidebar sidebar-dark">
+        <div class="menu-list">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a class="d-xl-none d-lg-none" href="#">Bütçe Takip</a>
+                <div class="navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav flex-column">
+                        <li class="nav-divider">
+                            Menü
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/Home/Index"><i class="fa fa-fw fa-user-circle"></i>Genel Bakış</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Gelir/Index"><i class="fa fa-fw fa-chart-line"></i>Gelirler</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Gider/Index"><i class="fa fa-fw fa-shopping-cart"></i>Giderler</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Rapor/Index"><i class="fa fa-fw fa-chart-bar"></i>Raporlar</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="dashboard-wrapper">
+        <div class="dashboard-content">
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    @RenderSection("Scripts", required: false)
+
+    <!-- jQuery -->
+    <script src="~/concept-master/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <!-- Bootstrap Bundle JS -->
+    <script src="~/concept-master/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+    <!-- Slimscroll -->
+    <script src="~/concept-master/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <!-- Main JS -->
+    <script src="~/concept-master/assets/libs/js/main-js.js"></script>
+    <!-- Sidebar Toggle Script -->
+    <script>
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            var sidebar = document.querySelector('.nav-left-sidebar');
+            var content = document.querySelector('.dashboard-wrapper');
+            sidebar.classList.toggle('active');
+            content.classList.toggle('sidebar-open');
+        });
+
+        // Ekran boyutu değiştiğinde sidebar'ı kontrol et
+        window.addEventListener('resize', function() {
+            var sidebar = document.querySelector('.nav-left-sidebar');
+            var content = document.querySelector('.dashboard-wrapper');
+            if (window.innerWidth >= 992) {
+                sidebar.classList.add('active');
+                content.classList.add('sidebar-open');
+            } else {
+                sidebar.classList.remove('active');
+                content.classList.remove('sidebar-open');
+            }
+        });
+
+        // Sayfa yüklendiğinde ekran boyutunu kontrol et
+        window.addEventListener('load', function() {
+            var sidebar = document.querySelector('.nav-left-sidebar');
+            var content = document.querySelector('.dashboard-wrapper');
+            if (window.innerWidth >= 992) {
+                sidebar.classList.add('active');
+                content.classList.add('sidebar-open');
+            }
+        });
+    </script>
+</body>
+
+</html>

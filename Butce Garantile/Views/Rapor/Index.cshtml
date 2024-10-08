@@ -1,0 +1,123 @@
+﻿@model List<Butce_Garantile.Models.MonthlyReport>
+
+@{
+    Layout = "_Layout"; // Bu, Views/Shared/_Layout.cshtml dosyasını bulur.
+}
+<div class="row">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="page-header">
+            <div class="page-breadcrumb">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-4">
+    <h2 class="mb-4">Aylık Gelir ve Gider Raporları</h2> <!-- Updated header -->
+    <div class="accordion" id="accordionReports">
+        @foreach (var reportGroup in Model.GroupBy(r => new { r.Year, r.Month })) // Yıla ve aya göre grupla
+        {
+            var report = reportGroup.First(); // Gruptan ilk raporu al
+                                              // Gelir veya gider sıfır ise o ayı göz ardı et
+            if (report.Income == 0 && report.Expense == 0)
+            {
+                continue; // Bu ayı atla
+            }
+
+            // Farkı hesapla
+            var difference = report.Income - report.Expense;
+            var differenceClass = difference > 0 ? "text-success" : "text-danger"; // Yeşil veya kırmızı
+
+            <div class="card mb-3">
+                <div class="card-header" id="heading@(report.Month)@(report.Year)">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse@(report.Month)@(report.Year)" aria-expanded="true" aria-controls="collapse@(report.Month)@(report.Year)">
+                            <span class="accordion-icon"></span>
+                            @report.Month.ToString() @report.Year
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapse@(report.Month)@(report.Year)" class="collapse" aria-labelledby="heading@(report.Month)@(report.Year)" data-parent="#accordionReports">
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <td><strong>Toplam Gelir:</strong></td>
+                                    <td>₺@report.Income</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Toplam Gider:</strong></td>
+                                    <td>₺@report.Expense</td>
+                                </tr>
+                                <tr class="@differenceClass">
+                                    <td><strong>Fark:</strong></td>
+                                    <td>₺@difference</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none; /* Kenar çizgisini kaldır */
+        border-radius: 0.5rem; /* Yuvarlak köşeler */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+        transition: transform 0.2s ease-in-out; /* Animasyon ekle */
+    }
+
+        .card:hover {
+            transform: scale(1.02); /* Hover sırasında büyüt */
+        }
+
+    .card-header {
+        background-color: #f8f9fa; /* Açık gri arka plan */
+        font-weight: bold; /* Kalın yazı */
+        cursor: pointer; /* İmleç değişimi */
+    }
+
+    .btn-link {
+        color: #007bff; /* Bootstrap mavi */
+        text-decoration: none; /* Alt çizgi yok */
+        display: flex; /* Flex kullanarak içeriği hizala */
+        align-items: center; /* Ortada hizala */
+    }
+
+    .accordion-icon {
+        display: inline-block;
+        margin-right: 10px; /* İkon için boşluk */
+        width: 10px;
+        height: 10px;
+        border: solid #007bff; /* İkon rengi */
+        border-width: 0 2px 2px 0; /* Üst ve sağ kenar */
+        transform: rotate(45deg); /* İkonun açısı */
+        transition: transform 0.3s; /* İkon animasyonu */
+    }
+
+    .collapse.show + .card-header .accordion-icon {
+        transform: rotate(-135deg); /* Açıldığında ikonun dönüşü */
+    }
+
+    .text-success {
+        color: green; /* Pozitif fark için yeşil */
+    }
+
+    .text-danger {
+        color: red; /* Negatif fark için kırmızı */
+    }
+
+    .table {
+        margin-bottom: 0; /* Tablo alt boşluğunu kaldır */
+    }
+
+        .table td {
+            padding: 0.75rem; /* Hücrelerdeki boşluğu artır */
+        }
+</style>

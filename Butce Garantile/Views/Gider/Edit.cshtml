@@ -1,0 +1,67 @@
+﻿@model Butce_Garantile.Models.Gider
+@{
+    Layout = "_Layout";
+}
+<div class="row">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="page-header">
+            <div class="page-breadcrumb">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<h1>Gider Düzenle</h1>
+<form asp-action="Edit" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="Aciklama"></label>
+        <input asp-for="Aciklama" class="form-control" />
+        <span asp-validation-for="Aciklama" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Tutar"></label>
+        <input asp-for="Tutar" class="form-control" />
+        <span asp-validation-for="Tutar" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Tarih"></label>
+        <input asp-for="Tarih" class="form-control" type="date" />
+        <span asp-validation-for="Tarih" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="GiderTuru"></label>
+        <select asp-for="GiderTuru" class="form-control" onchange="showOtherInput(this)">
+            <option value="">Seçiniz...</option>
+            @foreach (var giderTuru in Butce_Garantile.Models.Gider.GiderTurleri)
+            {
+                <option value="@giderTuru" selected="@(giderTuru == Model.GiderTuru)">@giderTuru</option>
+            }
+        </select>
+        <span asp-validation-for="GiderTuru" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="IsDüzenli"></label>
+        <input asp-for="IsDüzenli" type="checkbox" />
+    </div>
+    <button type="submit" formmethod="post" class="btn btn-primary">Güncelle</button>
+    <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function showOtherInput(select) {
+            const otherInput = document.getElementById('otherInput');
+            if (select.value === 'Diğer') {
+                otherInput.style.display = 'block';
+            } else {
+                otherInput.style.display = 'none';
+            }
+        }
+    </script>
+}
